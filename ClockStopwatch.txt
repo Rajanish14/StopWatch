@@ -1,0 +1,64 @@
+import java.util.Scanner;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
+public class SimpleClockStopwatch {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        long start = 0, end = 0;
+        boolean running = false;
+        ZoneId indiaZone = ZoneId.of("Asia/Kolkata");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        while (true) {
+            ZonedDateTime indiaTime = ZonedDateTime.now(indiaZone);
+            System.out.println("Current Time (IST): " + indiaTime.format(formatter));
+            System.out.println("1. Start Stopwatch");
+            System.out.println("2. Stop Stopwatch");
+            System.out.println("3. Reset Stopwatch");
+            System.out.println("4. Show Elapsed Time");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = sc.nextInt();
+            if (choice == 1) {
+                if (!running) {
+                    start = System.currentTimeMillis();
+                    running = true;
+                    System.out.println("Stopwatch started.");
+                } else {
+                    System.out.println("Stopwatch already running.");
+                }
+            } else if (choice == 2) {
+                if (running) {
+                    end = System.currentTimeMillis();
+                    running = false;
+                    System.out.println("Stopwatch stopped.");
+                } else {
+                    System.out.println("Stopwatch not running.");
+                }
+            } else if (choice == 3) {
+                start = 0;
+                end = 0;
+                running = false;
+                System.out.println("Stopwatch reset.");
+            } else if (choice == 4) {
+                long elapsed;
+                if (running) {
+                    elapsed = System.currentTimeMillis() - start;
+                } else {
+                    elapsed = end - start;
+                }
+                long seconds = elapsed / 1000;
+                long minutes = seconds / 60;
+                long hours = minutes / 60;
+                System.out.printf("Elapsed Time: %02d:%02d:%02d\n", hours, minutes % 60, seconds % 60);
+            } else if (choice == 5) {
+                break;
+            } else {
+                System.out.println("Invalid choice.");
+            }
+            System.out.println();
+        }
+        sc.close();
+        System.out.println("App closed.");
+    }
+}
